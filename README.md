@@ -4,7 +4,7 @@ This repository contains codes featured in the OpenACC Examples Document. All co
 For more details on the guide and other projects, please consult the [OpenACC V&V Website](https://crpl.cis.udel.edu/oaccvv/).
 
 ## Submitting Code
-If you wish to submit code to be used for the Examples Document, please create a PR request for us to review with your file. In your file, please include the following information in the header of the file while following the below format. Please also put this information in the PR request.
+If you wish to submit code to be used for the Examples Document, please push to the correct folder in the Submissions folder and create a PR request for us to review with your file. In your file, please include the following information in the header of the file while following the below format. Please also put this information in the PR request.
 
 File Name Format TBD
 ```
