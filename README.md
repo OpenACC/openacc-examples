@@ -34,8 +34,11 @@ Thank you for your contribution. We will look into your PR request and notify yo
 This document is being created with help from the OpenACC V&V team. For any further questions, please feel free to contact us.
 
 Daniel Horta - dchorta@udel.edu
+
 Aaron Jarmusch - jarmusch@udel.edu
+
 Aaron Liu - olympus@udel.edu
+
 Sunita Chandrasekaran - schandra@udel.edu
 
 Current Student Authors: Daniel Horta, Aaron Jarmusch, Aaron Liu
