@@ -4,9 +4,12 @@ This repository contains codes featured in the OpenACC Examples Document. All co
 For more details on the guide and other projects, please consult the [OpenACC V&V Website](https://crpl.cis.udel.edu/oaccvv/).
 
 ## Submitting Code
-If you wish to submit code to be used for the Examples Document, please push to the correct folder in the Submissions folder and create a PR request for us to review with your file. In your file, please include the following information in the header of the file while following the below format. Please also put this information in the PR request.
+If you wish to submit code to be used for the Examples Document, please push to the correct folder in the Submissions folder and create a PR request for us to review with your file. In your file, please include the following information in the header of the file while following the below format. Please name your file by giving us the topic of the code and a randomly GUID. You can use any random GUID generator you find online. Please also put this information in the PR request.
 
-File Name Format TBD
+File Name Format: topic_guid.filetype
+
+Example File
+File Name: parallel_loop_06e512a6b57e4ba1a407d46aa0b9664e.c
 ```
 1   /* <---------------->
 2   Your Name: Name (Optional)
@@ -27,6 +30,8 @@ File Name Format TBD
 A goal for this project is to have direct community involvement in its creation. As such, we strive to properly communicate with and credit any community members who may submit code for the Examples Document. However, we understand some may not be comfortable submitting said information; therefore, your name, email, GitHub username, and date of code written are all optional.
 
 For Features Referenced, please simply list what directives, clauses, and/or constructs are involved in the code. Please remember to provide what version of OpenACC, compilers, and compiler's versions you are using. This is important, as we try to test code on multiple compilers to ensure we get similar results. For the explanation, please explain in as few of sentences as possible what the code is doing. Please be direct and brief.
+
+At this moment, we are only accepting code in C/C++ and Fortran.
 
 Thank you for your contribution. We will look into your PR request and notify you via GitHub.
 
