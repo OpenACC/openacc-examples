@@ -1,9 +1,10 @@
+
 1   /* <---------------->
 2   Your Name: Aaron Liu
 3   Email: Olympus@ude.edu
 4   GitHub Username: AaronLiu20
-5   Date Code Written: 10/16/2022
-6   Features Referenced: copyin. copyout
+5   Date Code Written: 10/17/2022
+6   Features Referenced: copy
 7   OpenACC Version: 3.2
 8   Compiler(s) Used: Nvidia
 9
@@ -20,7 +21,7 @@ int main(){
     }
 
     double sum = 0.0;
-    #pragma acc parallel copyin(data[0:100], sum) copyout(sum) reduction(+:sum)
+    #pragma acc parallel copy(data[0:100], sum) reduction(+:sum)
     for(int x = 0; x < 100; ++x){
 	sum += data[x];
     }
