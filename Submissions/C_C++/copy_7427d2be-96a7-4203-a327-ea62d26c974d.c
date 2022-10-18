@@ -21,10 +21,13 @@ int main(){
     }
 
     double sum = 0.0;
-    //copy clause does copyin action at the start and copyout action at the end of a data region
+    //copy clause
+    //1.) performes the copyin action at the start of the data region for variables data and sum
+    //2.) performs the copyout action at the end of the data region for variables data and sum
+
     //reduction clause combines all of the values of the variable within the threads at the end
     #pragma acc parallel copy(data[0:100], sum) reduction(+:sum)
-    for(int x = 0; x < 101; ++x){
+    for(int x = 0; x < 100; ++x){
 	sum += data[x];
     }
 
