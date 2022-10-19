@@ -22,7 +22,13 @@ int main (){
     for(int x = 0; x < 100; ++x){
 	    device_values[0] = 1;
     }
-
+    //the redunction clause
+    //1.)combines the values of all the threads into one at the end of a data region
+    //2.)implicited declares variable sum with copy clause if not all ready within a data clause
+ 
+    //aggregate variables are implicited delared wtihin a copy clause if
+    //1.) the variable is not within a data clause already
+    //2.) default none is not used wtihin the pragma
     #pragma acc parallel loop reduction(+:sum)
     for( int x = 0; x < 100; ++x){
 	    sum += device_values[0];
