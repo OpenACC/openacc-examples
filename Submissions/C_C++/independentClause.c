@@ -26,7 +26,9 @@ int main(){
 
     //independent clause is implicted used when
     //1.) if there is no auto or seq clause within withe loop construct
-    //2.) it is a ophaned loop construct or the parent compute region is a parallel construct        #pragma acc parallel loop copy(Data1[0:100])
+    //2.) it is a ophaned loop construct or the parent compute region is a parallel construct        
+    
+    #pragma acc parallel loop copy(Data1[0:100])
     for(int x = 0; x < 100; ++x){
         Data1[x] += Data1[x];
     }
@@ -43,7 +45,8 @@ int main(){
     //independent clause allows for no synchronization between the parallel regions
 
     //this clause behaves differently for
-    //1.) variables within the reduction clause since combining the values is the last step          //2.) compute region has atomic clause
+    //1.) variables within the reduction clause since combining the values is the last step          
+    //2.) compute region has atomic clause
 
     for( int x = 0; x < 100; ++x){
         if(Data1[x] - Data2[x] > .00001){
