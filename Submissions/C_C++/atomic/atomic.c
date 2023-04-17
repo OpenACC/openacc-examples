@@ -31,7 +31,7 @@ int main(){
     #pragma acc parallel loop copy(data[0:n]) copyout(readSum)
     for(int x = 0; x < n; ++x){
         if(data[x] >= n/2){
-            #pragma acc atomic write
+            #pragma acc atomic read
             readSum = x;
         }
     }
