@@ -21,9 +21,20 @@ int main(){
 	    data[x] = x;	    
     }
 
+    double readSum = 0.0;
     double writeSum = 0.0;
     double captureSum = 0.0;
     double updateSum = 0.0;
+
+    // the atomic construct prevents reading the value while a gang/worker/vector is writing and vice versa
+    //this is the read clause read the value of one variable into another variable
+    #pragma acc parallel loop copy(data[0:n]) copyout(readSum)
+    for(int x = 0; x < n; ++x){
+        if(data[x] >= n/2){
+            #pragma acc atomic write
+            readSum = x;
+        }
+    }
 
     // the atomic construct prevents reading the value while a gang/worker/vector is writing and vice versa
     //this is the write clause that only allows a direct write to a variable from a expression
@@ -31,7 +42,7 @@ int main(){
     for(int x = 0; x < n; ++x){
         if(data[x] >= n/2){
             #pragma acc atomic write
-            writeSum = x;
+            writeSum = x*2 + 1;
         }
     }
 
