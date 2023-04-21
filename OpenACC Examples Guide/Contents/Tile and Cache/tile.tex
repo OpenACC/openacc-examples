@@ -1,0 +1,34 @@
+%NOTE: ADD CITATIONS
+Recall that tiling is used to reduce the amount of traffic going through memory. Data is partitioned into tiles in order to be stored in shared memory. In OpenACC, the tile clause allows the user to indicate the location of data inside of a loop nest, letting a compiler optimize inside a set tile. Using this effectively can improve performance. 
+
+The following code is provided by David Appelhans. 
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=tiling with matrix transpose, label=prototype, numbers=none]
+subroutine transpose_accgangvecttile(A,B,n) 
+    implicit none
+
+    ! passed variables
+    real(kind=8), intent(in) :: A(:,:)
+    real(kind=8), intent(out) :: B(:,:)   
+    integer, intent(in) :: n
+    ! local variables
+    integer :: i,j
+
+    !$acc parallel loop gang vector tile(16,16)
+    do j=1,n
+       do i=1,n
+          B(j,i) = A(i,j) ! coallesced read, uncoalesced write
+       enddo
+    enddo
+    !$acc end parallel
+    
+    return
+
+ end subroutine transpose_accgangvecttile
+\end{lstlisting}
+\end{Code}
+
+As you see in the above code, the tile clause references a tile of 16x16 size across a nested for loop. The outer loop references the tiles, and the inner loop references the elements. 
+
+Note that you could also use an asterisks inside of declaring a set size for tile; in this case, the implementation will pick a value for you. 

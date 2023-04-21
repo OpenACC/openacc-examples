@@ -1,0 +1,71 @@
+An important feature added in OpenACC Specification 2.6 is the ability to perform a manual deep copy. When copying data structures to the device using the copy clause, only the first level of data is copied to the device, which we refer to as a shallow copy. Any nested dynamic structures that uses pointers that point to other data aren't fully copied to the device when this happens. This nested is then stuck on the host device, which could lead to issues with performance. 
+
+Here is a basic example of how to perform a manual deep copy in order to copy this nested data onto the device\footnote{Example from official OpenACC Blog Post: https://www.openacc.org/blog/whats-new-openacc-26}. 
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=basicdeepcopy.c, label=prototype, numbers=none]
+struct {
+  int *x;  // size 2
+}*A          // size 2
+#pragma acc data copy(A[0:2])
+#pragma acc data copy(A.x[0:2])
+\end{lstlisting}
+\end{Code}
+
+In this simple example, you have a struct A that contains a single int pointer x. To perform a deep copy, you do a shallow copy with the data as usual to copy over the struct itself, and then perform a copy of the value in the struct itself, in this case x. With a shallow copy, you would get the struct copied to the device, but you aren't guaranteed to have more than one value of int x copied over, if at all. This issue becomes more apparent when the pointer is pointing to something like an array.
+
+The following code below verifies that all the values of the struct are deep copied to the device, using the same struct as shown above\footnote{Special thanks to Mathew Colgrove from Nvidia for assistance in writing this code.}. Notice how after creating space for both structs, we then had to create space for the nested data as well. Only then once that nested data for both device and host structs are copied in can we compare the nested values between the two structs.
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=manualdeepcopy.c, label=prototype, numbers=none]
+int size = 2;
+	A *host = (A *)malloc(size * sizeof(A));
+	A *device = (A *)malloc(size * sizeof(A));
+	#pragma acc enter data create(host[:size])
+	#pragma acc enter data create(device[:size])
+
+	//Initialize host and device
+	for(int i = 0; i < size; i++){
+		host[i].x = (int *)malloc(size * sizeof(int));
+		device[i].x = (int *)malloc(size * sizeof(int));
+		
+		for(int j = 0; j < size; j++){
+			host[i].x[j] = i * size + j;
+		}
+		#pragma acc enter data copyin(host[i].x[:size])
+		#pragma acc enter data create(device[i].x[:size])
+
+	}
+
+	#pragma acc parallel loop present(host, device)
+	for(int i = 0; i < size; i++){
+		#pragma acc loop vector
+		for(int j = 0; j < size; j++){
+			device[i].x[j] = host[i].x[j];
+		}
+	}
+
+	//Check to see if copy was correct
+	for (int i = 0; i < size; i++) {
+		#pragma acc update self(device[i].x[:size])
+    		for (int j = 0; j < size; j++) {
+      			if (device[i].x[j] != host[i].x[j]) {
+        			printf("Error: Copy failed\n");
+        			return 1;
+      			}
+    		}
+  	}
+
+  	// Free memory
+  	for (int i = 0; i < size; i++) {
+		#pragma acc exit data delete(host[i].x, device[i].x)
+    		free(host[i].x);
+    		free(device[i].x);
+  	}
+	#pragma acc exit data delete(host,device)
+  	free(host);
+  	free(device);
+
+	return 0;
+\end{lstlisting}
+\end{Code}

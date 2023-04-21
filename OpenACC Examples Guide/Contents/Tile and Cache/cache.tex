@@ -1,0 +1,57 @@
+Cache is part of the memory hierarchy, usually used to temporarily store data. Data is either created through main memory or read from the internal or external processor and is then later written into main memory. Cache is used for recently accessed data, and is more efficient in obtaining said data. 
+
+Recall from the specifications that the cache directive specifies what array elements or subarrays should be grabbed into the highest level of the cache. In the code below, the elements in scratchpad are what's cached.
+
+The following code is provided by David Appelhans. 
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=cache with matrix transpose, label=prototype, numbers=none]
+subroutine transpose_acc_cache(A,B,n) 
+    implicit none
+
+    ! passed variables
+    real(kind=8), intent(in) :: A(:,:)
+    real(kind=8), intent(out) :: B(:,:)   
+    integer, intent(in) :: n
+    ! local variables
+    integer :: i,j, istart, jstart, ii, jj
+    integer :: xthreads, ythreads
+    real(kind=8) :: scratchpad(16,16)
+    
+    ! pick good set of launch params
+    xthreads = 16
+    ythreads = 16
+
+    !$acc parallel loop gang collapse(2) vector_length(16*16) private(scratchpad)
+    do jstart=1, n, ythreads 
+       do istart=1, n, xthreads
+          !$acc cache(scratchpad(:,:))
+          !$acc loop vector collapse(2)
+          do jj = 1, ythreads
+             do ii = 1, xthreads
+                i = ii+istart-1
+                j = jj+jstart-1
+                if(i<=n .AND. j<=n) then
+                   scratchpad(ii,jj) = A(i,j) ! coalesced read from global mem
+                endif
+             enddo
+          enddo ! <- implicit sync point here
+          !$acc loop vector collapse(2)
+          do ii = 1, xthreads
+             do jj = 1, ythreads
+                i = ii+istart-1
+                j = jj+jstart-1
+                if(i<=n .AND. j<=n) then
+                   B(j,i) = scratchpad(ii,jj) ! coalesced write to global mem
+                endif
+             enddo
+          enddo
+       enddo
+    enddo    
+    !$acc end parallel
+    
+    return
+
+  end subroutine transpose_acc_cache
+\end{lstlisting}
+\end{Code}

@@ -1,0 +1,12 @@
+One of the most commonly used code when using OpenACC is the simple parallel loop. 
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=parallelLoop.c, label=prototype, numbers=none]
+void pcloop(int n, float *a, float *b){
+#pragma acc parallel loop
+    for(int i = 0; i < n; i++){
+        b[i] = a[i] + a[i + 1];
+    }
+}
+\end{lstlisting}
+\end{Code}

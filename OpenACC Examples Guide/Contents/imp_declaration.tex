@@ -1,0 +1,19 @@
+A simple yet vital concept to understand is implicit versus explicit declaration. Explicit variable declaration is simply when a variable's type is defined before the value is set. So, a variable x is declared as an integer, and then later in the code x is set to some integer value. Implicit declaration means a variable's type is not defined ahead of time, and is stead assumed by the operators; however, any data could still be put into it. An example of this in action is shown below; notice how the variable sum is implicitly declared by just being set to the values of \texttt{device\_values}[n]. 
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=combinedConstructs.c, label=prototype, numbers=none]
+int sum = 0;
+double *device_values = (double *)malloc(100 * sizeof(double) );
+
+for(int x = 0; x < 100; ++x){
+    device_values[0] = 1;
+}
+
+#pragma acc parallel loop reduction(+:sum)
+for( int x = 0; x < 100; ++x){
+    sum += device_values[0];
+}
+\end{lstlisting}
+\end{Code}
+
+Please note that aggregate variables are implicitly declared within a copy clause if the variable is not within a data clause already and the default none is not used within a the pragma. 

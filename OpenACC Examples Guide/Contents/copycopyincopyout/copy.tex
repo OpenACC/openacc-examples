@@ -1,0 +1,35 @@
+If a variable is not in shared memory, it can either enter or exist a region through the copy clause. The copy clause performs the copyin action at the start of the data region for variables data and sum and performs the copyout action at the end of the data region for variables data and sum. This allows data to transfer between data regions and compute regions.
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=copy.c, label=prototype, numbers=none]
+double * data = (double *)malloc( 100 * sizeof(double));
+for( int x = 0; x < 100; ++x){
+	data[x] = x;	    
+}
+
+double sum = 0.0;
+
+#pragma acc parallel copy(data[0:100], sum) reduction(+:sum)
+for(int x = 0; x < 100; ++x){
+	sum += data[x];
+}
+\end{lstlisting}
+\end{Code}
+
+So what is a copyin and copyout? A copyin moves a copy of the variables inside of the data region. A copyout moves a copy of the variables outside of the data region. So, a copy can do both, but it could be useful to do copyin and copyout instead depending on what data is going in and out of your region.
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=copyinCopyout.c, label=prototype, numbers=none]
+double * data = (double *)malloc( 100 * sizeof(double));
+for( int x = 0; x < 100; ++x){
+	data[x] = x;	    
+}
+
+double sum = 0.0;
+
+#pragma acc parallel copyin(data[0:100], sum) copyout(sum) reduction(+:sum)
+for(int x = 0; x < 100; ++x){
+	sum += data[x];
+}
+\end{lstlisting}
+\end{Code}

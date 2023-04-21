@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{listings}
+\usepackage{chngcntr}
+\lstset{ %
+	basicstyle=\fontsize{10}{10}\ttfamily,
+    language=c,
+    breaklines=true,
+    numbers=left,
+    numbersep=4pt,
+    aboveskip=-8pt,
+    belowskip=-8pt,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green}
+}
+\renewcommand\lstlistingname{Code}
+\usepackage{float}
+\floatstyle{plain}
+\newfloat{Code}{h!}{myc}
+\newfloat{Table}{h!}{myc}
+\newfloat{CodeSide}{}{myc}
+\newfloat{CodeBottom}{b!}{myc}
+\newfloat{CodeTop}{t!}{myc}
+\usepackage{blindtext}
+\usepackage[utf8]{inputenc}
+\usepackage{comment}
+\usepackage{xurl}
+
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\def\wu{\superscript{\dag}}
+\def\wg{\superscript{\ddag}}
+
+\floatstyle{plaintop}
+\restylefloat{Table}
+\usepackage{caption} 
+\captionsetup[Table]{skip=6pt}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    linktocpage,
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\pagenumbering{roman}
+
+\usepackage[
+backend=biber,
+style=alphabetic,
+]{biblatex}
+\addbibresource{main.bib}
+
+\begin{document}
+\title{OpenACC Examples Guide}
+
+\author{OpenACC V-V}
+\date{November 2022}
+
+\maketitle
+\newpage
+
+This page is intentionally left blank.
+
+\newpage
+\tableofcontents
+\pagenumbering{arabic}
+
+\newpage
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
+\input{Contents/introduction}
+
+\newpage
+\addcontentsline{toc}{section}{Format}
+\section*{Format}
+\input{Contents/format}
+
+\newpage
+\section{Implicit Declaration}
+\input{Contents/imp_declaration}
+
+\newpage
+\section{Data Independence}
+\input{Contents/dataindependence}
+
+\newpage
+\section{Device Clauses}
+\input{Contents/device clauses/device clauses}
+
+\subsection{Device Type}
+\input{Contents/device clauses/device_type}
+
+\newpage
+\section{Compute Clauses - Parallel}
+\input{Contents/compute constructs/compute clauses}
+
+\subsection{Parallel Loop}
+\input{Contents/compute constructs/parallel loop}
+
+\subsection{Combined Constructs}
+\input{Contents/compute constructs/combinedconstructs}
+
+\subsection{Reduction}
+\input{Contents/compute constructs/reduction}
+
+\newpage
+\section{Copy, Copyin, and Copyout}
+\input{Contents/copycopyincopyout/copy}
+
+\newpage
+\subsection{Enter Data and Exit Data}
+\input{Contents/copycopyincopyout/enterexitdata}
+
+\newpage
+\subsection{Manual Deep Copy}
+\input{Contents/copycopyincopyout/manualdeepcopy}
+
+\newpage
+\section{Tile and Cache}
+\input{Contents/Tile and Cache/t&c overview}
+
+\newpage
+\subsection{Tile}
+\input{Contents/Tile and Cache/tile}
+
+\newpage
+\subsection{Cache}
+\input{Contents/Tile and Cache/cache}
+
+\newpage
+\section{Complex Examples}
+\input{Contents/Complex Examples/complexexamples}
+
+\newpage
+\subsection{Cholesky Decomposition}
+\input{Contents/Complex Examples/Cholesky Decomposition}
+
+\newpage
+\printbibliography
+
+\end{document}

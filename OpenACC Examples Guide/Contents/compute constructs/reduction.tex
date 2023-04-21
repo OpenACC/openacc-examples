@@ -1,0 +1,48 @@
+The reduction clause creates a private copy for each parallel gang and is initialized to the specified operator. At the conclusion of a region, the values of each gang are combined with the reduction operator, with the result combined with the original value of the variable and stored in the original variable\footnote{https://www.openacc.org/sites/default/files/inline-images/Specification/OpenACC-3.2-final.pdf}.
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=reduction.c, label=prototype, numbers=none]
+int sum = 0;
+double * a = (double *)malloc(10 * sizeof(double));
+
+for (int i = 0; i < 10; i++){
+	a[i] = 1;
+}
+
+#pragma acc parallel loop reduction(+:sum)
+for (int i = 0; i < 10; i++){
+	sum += a[i];
+}
+\end{lstlisting}
+\end{Code}
+
+Reduction clauses could also be nested when doing reduction on multiple variables in a 2-D array. The following is an example of the Jacobi Iteration, an algorithm that iteratively converges to the correct value by computing new values at each point from the average of neighboring points\cite{OpenACCBest}.
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption=nestedReduction.c, label=prototype, numbers=none]
+while(error > tol && iter < iter_max) {
+	error = 0.0;
+
+	#pragma acc parallel loop reduction(max:error)
+	for(int j = 1; j < n-1; j++){
+		#pragma acc loop reduction(max:error)
+		for(int i = 1; i < m-1; i++){
+			A[j][i] = 0.25 * (Anew[j][i+1] + Anew[j][i-1] + Anew[j-1][i] + Anew[j+1][i]);
+			error = fmax(error, fabs(A[j][i] - Anew[j][i]));
+		}
+	}
+
+	#pragma acc parallel loop
+	for(int j = 1; j < n-1; j++){
+		#pragma acc loop
+		for(int i = 1; i < m-1; i++){
+			A[j][i] = Anew[j][i];
+		}
+	}
+
+	if(iter % 100 == 0) printf("%5d, %0.6f\n", iter, error);
+
+	iter++;
+}
+\end{lstlisting}
+\end{Code}

@@ -1,0 +1,17 @@
+The parallel loop also introduces a vital idea known as combined constructs. Whiles clauses are limited to certain constructs, all constructs can be combined to unlock full capabilities. The most common form of this is the previously seen parallel loop. The parallel construct starts parallel execution on the current device, while the loop construct describes what type of parallelism to use to execute the loop, as well as describe reduction operations. The following is another common example of combining the two constructs.
+
+\begin{Code}
+\begin{lstlisting}[frame=single, caption= combinedConstructs.c, label=prototype, numbers=none]
+double * a = (double *)malloc(100 * sizeof(double));
+
+for (int i = 0; i < 100; i++){
+    a[i] = 1;
+}
+
+#pragma acc parallel loop reduction(-:sum)
+for (int i = 0; i < 100; i++){
+    sum -= a[i];
+}
+\end{lstlisting}
+\end{Code}
+
